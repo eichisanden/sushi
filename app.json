@@ -1,0 +1,8 @@
+{
+  "name": "sushi",
+  "description": "Share gourmet spot around your office",
+  "repository": "https://github.com/eichisanden/sushi.git",
+  "logo": "",
+  "keywords": ["node", "express", "static"],
+  "image": "heroku/nodejs"
+}
