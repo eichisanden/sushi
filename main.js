@@ -4,14 +4,16 @@ let $ = require('jquery');
 require('./style.less');
 
 let initMap = () => {
-  let latlng = new google.maps.LatLng(35.687525, 139.703146);
-  let opts = {
-    zoom: 15,
-    center: latlng,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  let map = new google.maps.Map(document.getElementById("map_canvas"), opts);
-  let infoWindow = new google.maps.InfoWindow({map: map});
+  let latlng = new google.maps.LatLng(35.687525, 139.703146),
+    opts = {
+      zoom: 15,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    },
+    map = new google.maps.Map(document.getElementById("map_canvas"), opts),
+    infoWindow = new google.maps.InfoWindow({
+      map: map
+    });
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -29,10 +31,10 @@ let initMap = () => {
   }
 
   map.addListener('click', (e) => {
-    let infoWin = require('./views/parts/infoWindow.jade');
-    let infoWindow = new google.maps.InfoWindow({
-      content: infoWin()
-    });
+    let infoWin = require('./views/parts/infoWindow.jade'),
+      infoWindow = new google.maps.InfoWindow({
+        content: infoWin()
+      });
     infoWindow.setPosition(e.latLng);
     infoWindow.open(map);
     placeMarkerAndPanTo(e.latLng, map);
@@ -48,5 +50,7 @@ let initMap = () => {
     map.panTo(latLng);
   }
 }
+
+google.maps.event.addDomListener(window, 'load', initMap);
 
 module.exports = initMap;

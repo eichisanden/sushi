@@ -3,5 +3,6 @@ extends layout/layout
 block title
     title Sushi
 block content
-    div#map_canvas(style={width:'500px',height:'300px'})
-    iframe(width="600",height="450",frameborder="0",style={border:"0"}, src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA5Np_2TNJEvDTWOb4X3fqZYsarsyAKUWI&q=#{q}", allowfullscreen)
+    div.ggmap
+        iframe(width="600",height="450",frameborder="0",style={border:"0"}, src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA5Np_2TNJEvDTWOb4X3fqZYsarsyAKUWI&q=#{q}", allowfullscreen)
+    div#map_canvas.ggmap(style={width:'600px',height:'450px'})
