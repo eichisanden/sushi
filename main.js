@@ -5,15 +5,54 @@ require('./style.less');
 
 let initMap = () => {
   let latlng = new google.maps.LatLng(35.687525, 139.703146),
+    newType1Style = [{
+      featureType: "road",
+      stylers: [{
+        visibility: "off"
+      }]
+    }, {
+      "elementType": "geometry",
+      "stylers": [{
+        "lightness": -74
+      }]
+    }],
+    newType2Style = [{
+      featureType: "poi.business",
+      stylers: [{
+        visibility: "off"
+      }]
+    }, {
+      "elementType": "geometry",
+      "stylers": [{
+        "lightness": -74
+      }]
+    }],
+    newType1 = new google.maps.StyledMapType(newType1Style, {
+      name: "road"
+    }),
+    newType2 = new google.maps.StyledMapType(newType2Style, {
+      name: "business"
+    }),
     opts = {
-      zoom: 15,
+      zoom: 12,
       center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeControl: true,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeControlOptions: {
+        mapTypeIds: [
+          google.maps.MapTypeId.ROADMAP,
+          google.maps.MapTypeId.SATELLITE,
+          'new_type1',
+          'new_type2',
+        ]
+      }
     },
     map = new google.maps.Map(document.getElementById("map_canvas"), opts),
     infoWindow = new google.maps.InfoWindow({
       map: map
     });
+  map.mapTypes.set('new_type1', newType1);
+  map.mapTypes.set('new_type2', newType2);
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {

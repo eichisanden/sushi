@@ -11,7 +11,8 @@
     "bootstrap": "^3.3.5",
     "bootstrap-webpack": "0.0.3",
     "express": "~4.9.x",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "nedb": "^1.1.4"
   },
   "engines": {
     "node": "0.12.2"
