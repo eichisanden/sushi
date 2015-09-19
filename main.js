@@ -48,9 +48,7 @@ let initMap = () => {
       }
     },
     map = new google.maps.Map(document.getElementById("map_canvas"), opts),
-    infoWindow = new google.maps.InfoWindow({
-      map: map
-    });
+    infoWindow = new google.maps.InfoWindow();
   map.mapTypes.set('new_type1', newType1);
   map.mapTypes.set('new_type2', newType2);
 
@@ -60,9 +58,6 @@ let initMap = () => {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
-
-      infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
       map.setCenter(pos);
     }, () => {
       console.log("navigator.geolocation not support");
@@ -70,13 +65,16 @@ let initMap = () => {
   }
 
   map.addListener('click', (e) => {
-    let infoWin = require('./views/parts/infoWindow.jade'),
-      infoWindow = new google.maps.InfoWindow({
-        content: infoWin()
-      });
+    let html = require('./views/parts/infoWindow.jade'),
+        $html = $(html());
+        console.log(html());
+        console.log($html.html());
+    $("#lat", $html).val(e.latLng.lat());
+    $("#lng", $html).val(e.latLng.lng());
+        console.log($html.html());
+    infoWindow.setContent($html.html());
     infoWindow.setPosition(e.latLng);
     infoWindow.open(map);
-    placeMarkerAndPanTo(e.latLng, map);
   });
 
   let placeMarkerAndPanTo = (latLng, map) => {
@@ -87,8 +85,8 @@ let initMap = () => {
       map: map
     });
     map.panTo(latLng);
-  }
-}
+  };
+};
 
 google.maps.event.addDomListener(window, 'load', initMap);
 

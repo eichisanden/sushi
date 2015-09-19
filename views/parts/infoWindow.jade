@@ -1,2 +1,11 @@
-form
-    input(type="text")
+div
+    form(method="post", action="/regist")
+        div.form-group
+            label(for="shopName") 店名
+            input.form-control(type="text", id="shopName", name="shopName")
+        div.form-group
+            label(for="shopNameKana") 店名カナ
+            input.form-control(type="text", id="shopNameKana", name="shopNameKana")
+        input(type="hidden", id="lat", name="lat")
+        input(type="hidden", id="lng", name="lng")
+        button.btn.btn-primary(type="submit") 登録

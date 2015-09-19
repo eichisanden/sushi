@@ -166,9 +166,7 @@
 	    }
 	  },
 	      map = new google.maps.Map(document.getElementById("map_canvas"), opts),
-	      infoWindow = new google.maps.InfoWindow({
-	    map: map
-	  });
+	      infoWindow = new google.maps.InfoWindow();
 	  map.mapTypes.set("new_type1", newType1);
 	  map.mapTypes.set("new_type2", newType2);
 
@@ -178,9 +176,6 @@
 	        lat: position.coords.latitude,
 	        lng: position.coords.longitude
 	      };
-
-	      infoWindow.setPosition(pos);
-	      infoWindow.setContent("Location found.");
 	      map.setCenter(pos);
 	    }, function () {
 	      console.log("navigator.geolocation not support");
@@ -188,13 +183,16 @@
 	  }
 
 	  map.addListener("click", function (e) {
-	    var infoWin = __webpack_require__(99),
-	        infoWindow = new google.maps.InfoWindow({
-	      content: infoWin()
-	    });
+	    var html = __webpack_require__(99),
+	        $html = $(html());
+	    console.log(html());
+	    console.log($html.html());
+	    $("#lat", $html).val(e.latLng.lat());
+	    $("#lng", $html).val(e.latLng.lng());
+	    console.log($html.html());
+	    infoWindow.setContent($html.html());
 	    infoWindow.setPosition(e.latLng);
 	    infoWindow.open(map);
-	    placeMarkerAndPanTo(e.latLng, map);
 	  });
 
 	  var placeMarkerAndPanTo = function (latLng, map) {
@@ -12304,7 +12302,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 
-	buf.push("<form><input type=\"text\"/></form>");;return buf.join("");
+	buf.push("<div><form method=\"post\" action=\"/regist\"><div class=\"form-group\"><label for=\"shopName\">店名</label><input type=\"text\" id=\"shopName\" name=\"shopName\" class=\"form-control\"/></div><div class=\"form-group\"><label for=\"shopNameKana\">店名カナ</label><input type=\"text\" id=\"shopNameKana\" name=\"shopNameKana\" class=\"form-control\"/></div><input type=\"hidden\" id=\"lat\" name=\"lat\"/><input type=\"hidden\" id=\"lng\" name=\"lng\"/><button type=\"submit\" class=\"btn btn-primary\">登録</button></form></div>");;return buf.join("");
 	}
 
 /***/ },

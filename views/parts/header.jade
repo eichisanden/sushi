@@ -14,6 +14,21 @@ nav.navbar.navbar-inverse
             div.form-group
               input.form-control(type="text" name="q" placeholder="Search")
               button.btn.btn-primary(type="submit") 検索
+      ul.nav.navbar-nav.navbar-right
+        li
+            a ようこそ
+        li
+          form.navbar-form.navbar-right(method="get" action="/login")
+            div.form-group
+              button.btn.btn-normal(type="submit") Login
+if msgSuccess
+    div.alert.alert-success.alert-dismissible(role="alert")= msgSuccess
+if msgInfo
+    div.alert.alert-info.alert-dismissible(role="alert")= msgInfo
+if msgWarn
+    div.alert.alert-warning.alert-dismissible(role="alert")= msgWarn
+if msgDanger
+    div.alert.alert-danger.alert-dismissible(role="alert")= msgDanger
 
 each food in ["和食", "日本料理", "寿司", "魚介・海鮮料理", "そば（蕎麦）", "うどん", "うなぎ", "焼き鳥", "とんかつ", "串揚げ", "天ぷら", "お好み焼き", "もんじゃ焼き","しゃぶしゃぶ", "沖縄料理", "洋食", "フレンチ", "イタリアン", "スペイン料理", "パスタ", "ピザ", "ステーキ", "ハンバーグ", "ハンバーガー", "中華料理", "餃子", "韓国料理", "ベトナム料理", "タイ料理", "ラーメン", "カレー", "焼肉", "ホルモン", "鍋", "もつ鍋", "居酒屋", "バイキング", "カフェ", "パン屋", "スイーツ", "ケーキ", "バー"]
   a(href="/?food=#{food}")  #{food}

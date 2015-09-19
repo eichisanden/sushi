@@ -1,0 +1,9 @@
+{
+  "dbConfig": {
+    "user": "heroku",
+    "password": "heroku",
+    "host": "localhost",
+    "port": "5432",
+    "db": "herokudev"
+  }
+}
