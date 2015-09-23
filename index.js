@@ -3,6 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var pg = require('pg');
 var config = require('config');
+var dbConfig = config.get("dbConfig");
+var con = "tcp://" + dbConfig.user + ":" + dbConfig.password + "@" + dbConfig.host + ":" + dbConfig.port + "/" + dbConfig.db;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -10,7 +12,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.set('port', (process.env.PORT || 5000));
-
 app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
@@ -18,10 +19,10 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-  res.render('index', {
-    q: req.query.food + "+新宿",
-    f: req.query.food
-  });
+    res.render('index', {
+      q: req.query.food + "+新宿",
+      f: req.query.food
+    });
 });
 
 app.post('/', function(req, res) {
@@ -33,11 +34,6 @@ app.post('/', function(req, res) {
 app.get('/login', function(req, res) {
   res.render('login', {});
 });
-
-//var con = "tcp://wnxrnzlqzwkdlx:RYDyaDhiWRAV79Sm9ZUzf-XBv-@ec2-50-16-229-89.compute-1.amazonaws.com:5432/dfsi19sk5qdl26";
-//var con = "tcp://wnxrnzlqzwkdlx:RYDyaDhiWRAV79Sm9ZUzf-XBv-@localhost:5432/dfsi19sk5qdl26";
-var dbConfig = config.get("dbConfig");
-var con = "tcp://" + dbConfig.user + ":" + dbConfig.password + "@" + dbConfig.host + ":" + dbConfig.port + "/" + dbConfig.db;
 
 app.post('/login', function(req, res) {
   var loginCd = req.body.loginCd;
@@ -95,6 +91,58 @@ app.post('/regist', function(req, res) {
       });
     });
   });
+});
+
+app.get('/listAll', function(req, res) {
+    pg.connect(con, function(err, client) {
+      if (err) {
+        console.log(err);
+      }
+      var query = client.query("select * from shops;");
+      var rows = [];
+      query.on('row', function(row) {
+        rows.push(row);
+      });
+      query.on('end', function(row, err) {
+        res.json({
+          rows: rows
+        });
+      });
+      query.on('error', function(error) {
+        console.log("予期せぬエラーが発生しました。" + error);
+        res.render('index', {
+          data: null,
+          msgDanger: "ERROR is occured!"
+        });
+      });
+    });
+});
+
+app.get('/detail', function(req, res) {
+    pg.connect(con, function(err, client) {
+      if (err) {
+        console.log(err);
+      }
+
+      var qstr = "select * from shops where id = $1;";
+      var query = client.query(qstr,[req.query.id]);
+      var rows = [];
+      query.on('row', function(row) {
+        rows.push(row);
+      });
+      query.on('end', function(row, err) {
+        res.json({
+          row: rows.length > 0 ? rows[0] : {}
+        });
+      });
+      query.on('error', function(error) {
+        console.log("予期せぬエラーが発生しました。" + error);
+        res.render('index', {
+          data: null,
+          msgDanger: "ERROR is occured!"
+        });
+      });
+    });
 });
 
 app.listen(app.get('port'), function() {

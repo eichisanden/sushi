@@ -166,6 +166,7 @@
 	    }
 	  },
 	      map = new google.maps.Map(document.getElementById("map_canvas"), opts),
+	      markers = [],
 	      infoWindow = new google.maps.InfoWindow();
 	  map.mapTypes.set("new_type1", newType1);
 	  map.mapTypes.set("new_type2", newType2);
@@ -185,25 +186,89 @@
 	  map.addListener("click", function (e) {
 	    var html = __webpack_require__(99),
 	        $html = $(html());
-	    console.log(html());
-	    console.log($html.html());
 	    $("#lat", $html).val(e.latLng.lat());
 	    $("#lng", $html).val(e.latLng.lng());
-	    console.log($html.html());
 	    infoWindow.setContent($html.html());
 	    infoWindow.setPosition(e.latLng);
 	    infoWindow.open(map);
 	  });
 
-	  var placeMarkerAndPanTo = function (latLng, map) {
-	    var marker = new google.maps.Marker({
-	      position: latLng,
-	      draggable: true,
-	      animation: google.maps.Animation.DROP,
-	      map: map
-	    });
-	    map.panTo(latLng);
+	  var detailShow = function (data) {
+	    var info = data.row,
+	        latLng = new google.maps.LatLng(info.lat, info.lng);
+	    infoWindow.setContent(info.name);
+	    infoWindow.setPosition(latLng);
+	    infoWindow.open(map);
 	  };
+
+	  var getDetailInfo = function (id) {
+	    $.ajax({
+	      url: "/detail",
+	      dataType: "json",
+	      data: {
+	        id: id
+	      },
+	      type: "GET"
+	    }).done(detailShow);
+	  };
+
+	  var placeMarker = function (id, info) {
+	    var position = new google.maps.LatLng(info.lat, info.lng),
+	        marker = new google.maps.Marker({ position: position, map: map });
+	    google.maps.event.addListener(marker, "click", function () {
+	      getDetailInfo(id);
+	    });
+	    marker[id] = marker;
+	  };
+
+	  var listAll = function (data) {
+	    var id = undefined,
+	        i = undefined,
+	        newLen = undefined,
+	        shops = [],
+	        newStore = [];
+
+	    shops = data.rows;
+	    newLen = shops.length;
+
+	    for (i = 0; i < newLen; i++) {
+	      id = shops[i].id;
+	      newStore[id] = 1;
+	    }
+
+	    for (id in markers) {
+	      if (!newStore[id]) {
+	        markers[id].setMap(null);
+	        delete markers[id];
+	      }
+	    }
+
+	    for (i = 0; i < newLen; i++) {
+	      id = shops[i].id;
+	      if (!markers[id]) {
+	        placeMarker(id, shops[i]);
+	      }
+	    }
+	  };
+
+	  var getTarget = function () {
+	    var latLngBounds = map.getBounds(),
+	        northEast = latLngBounds.getNorthEast(),
+	        southWest = latLngBounds.getSouthWest();
+	    $.ajax({
+	      url: "/listAll",
+	      dataType: "json",
+	      data: {
+	        neLat: northEast.lat(),
+	        neLng: northEast.lng(),
+	        swLat: southWest.lat(),
+	        swLng: southWest.lng()
+	      },
+	      type: "GET"
+	    }).done(listAll);
+	  };
+
+	  google.maps.event.addListener(map, "idle", getTarget);
 	};
 
 	google.maps.event.addDomListener(window, "load", initMap);
