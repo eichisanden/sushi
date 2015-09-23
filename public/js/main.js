@@ -127,7 +127,7 @@
 	__webpack_require__(95);
 
 	var initMap = function () {
-	  var latlng = new google.maps.LatLng(35.687525, 139.703146),
+	  var defaultLatlng = new google.maps.LatLng(35.687509, 139.703345),
 	      newType1Style = [{
 	    featureType: "road",
 	    stylers: [{
@@ -157,8 +157,8 @@
 	    name: "business"
 	  }),
 	      opts = {
-	    zoom: 12,
-	    center: latlng,
+	    zoom: 15,
+	    center: defaultLatlng,
 	    mapTypeControl: true,
 	    mapTypeId: google.maps.MapTypeId.ROADMAP,
 	    mapTypeControlOptions: {
@@ -171,17 +171,17 @@
 	  map.mapTypes.set("new_type1", newType1);
 	  map.mapTypes.set("new_type2", newType2);
 
-	  if (navigator.geolocation) {
-	    navigator.geolocation.getCurrentPosition(function (position) {
-	      var pos = {
-	        lat: position.coords.latitude,
-	        lng: position.coords.longitude
-	      };
-	      map.setCenter(pos);
-	    }, function () {
-	      console.log("navigator.geolocation not support");
-	    });
-	  }
+	  // if (navigator.geolocation) {
+	  //   navigator.geolocation.getCurrentPosition((position) => {
+	  //     var pos = {
+	  //       lat: position.coords.latitude,
+	  //       lng: position.coords.longitude
+	  //     };
+	  //     map.setCenter(pos);
+	  //   }, () => {
+	  //     console.log("navigator.geolocation not support");
+	  //   });
+	  // }
 
 	  map.addListener("click", function (e) {
 	    var html = __webpack_require__(99),

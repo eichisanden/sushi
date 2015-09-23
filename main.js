@@ -4,7 +4,7 @@ let $ = require('jquery');
 require('./style.less');
 
 let initMap = () => {
-  let latlng = new google.maps.LatLng(35.687525, 139.703146),
+  let defaultLatlng = new google.maps.LatLng(35.687509, 139.703345),
     newType1Style = [{
       featureType: "road",
       stylers: [{
@@ -34,8 +34,8 @@ let initMap = () => {
       name: "business"
     }),
     opts = {
-      zoom: 12,
-      center: latlng,
+      zoom: 15,
+      center: defaultLatlng,
       mapTypeControl: true,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControlOptions: {
@@ -53,17 +53,17 @@ let initMap = () => {
   map.mapTypes.set('new_type1', newType1);
   map.mapTypes.set('new_type2', newType2);
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      map.setCenter(pos);
-    }, () => {
-      console.log("navigator.geolocation not support");
-    });
-  }
+  // if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition((position) => {
+  //     var pos = {
+  //       lat: position.coords.latitude,
+  //       lng: position.coords.longitude
+  //     };
+  //     map.setCenter(pos);
+  //   }, () => {
+  //     console.log("navigator.geolocation not support");
+  //   });
+  // }
 
   map.addListener('click', (e) => {
     let html = require('./views/parts/infoWindow.jade'),
