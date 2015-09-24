@@ -128,48 +128,110 @@
 
 	var initMap = function () {
 	  var defaultLatlng = new google.maps.LatLng(35.687509, 139.703345),
-	      newType1Style = [{
-	    featureType: "road",
-	    stylers: [{
-	      visibility: "off"
-	    }]
-	  }, {
+	      newTypeStyle = [{
+	    featureType: "landscape.man_made",
 	    elementType: "geometry",
 	    stylers: [{
-	      lightness: -74
+	      color: "#f7f1df"
 	    }]
-	  }],
-	      newType2Style = [{
+	  }, {
+	    featureType: "landscape.natural",
+	    elementType: "geometry",
+	    stylers: [{
+	      color: "#d0e3b4"
+	    }]
+	  }, {
+	    featureType: "landscape.natural.terrain",
+	    elementType: "geometry",
+	    stylers: [{
+	      visibility: "on"
+	    }]
+	  }, {
+	    featureType: "poi",
+	    elementType: "labels",
+	    stylers: [{
+	      visibility: "on"
+	    }]
+	  }, {
 	    featureType: "poi.business",
+	    elementType: "all",
 	    stylers: [{
 	      visibility: "off"
 	    }]
 	  }, {
+	    featureType: "poi.medical",
 	    elementType: "geometry",
 	    stylers: [{
-	      lightness: -74
+	      color: "#fbd3da"
+	    }]
+	  }, {
+	    featureType: "poi.park",
+	    elementType: "geometry",
+	    stylers: [{
+	      color: "#bde6ab"
+	    }]
+	  }, {
+	    featureType: "road",
+	    elementType: "geometry.stroke",
+	    stylers: [{
+	      visibility: "off"
+	    }]
+	  }, {
+	    featureType: "road",
+	    elementType: "labels",
+	    stylers: [{
+	      visibility: "on"
+	    }]
+	  }, {
+	    featureType: "road.highway",
+	    elementType: "geometry.fill",
+	    stylers: [{
+	      color: "#ffe15f"
+	    }]
+	  }, {
+	    featureType: "road.highway",
+	    elementType: "geometry.stroke",
+	    stylers: [{
+	      color: "#efd151"
+	    }]
+	  }, {
+	    featureType: "road.arterial",
+	    elementType: "geometry.fill",
+	    stylers: [{
+	      color: "#ffffff"
+	    }]
+	  }, {
+	    featureType: "road.local",
+	    elementType: "geometry.fill",
+	    stylers: [{
+	      color: "black"
+	    }]
+	  }, {
+	    featureType: "transit.station.airport",
+	    elementType: "geometry.fill",
+	    stylers: [{
+	      color: "#cfb2db"
+	    }]
+	  }, {
+	    featureType: "water",
+	    elementType: "geometry",
+	    stylers: [{
+	      color: "#a2daf2"
 	    }]
 	  }],
-	      newType1 = new google.maps.StyledMapType(newType1Style, {
-	    name: "road"
-	  }),
-	      newType2 = new google.maps.StyledMapType(newType2Style, {
-	    name: "business"
+	      newType = new google.maps.StyledMapType(newTypeStyle, {
+	    name: "newType"
 	  }),
 	      opts = {
 	    zoom: 15,
 	    center: defaultLatlng,
-	    mapTypeControl: true,
-	    mapTypeId: google.maps.MapTypeId.ROADMAP,
-	    mapTypeControlOptions: {
-	      mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE, "new_type1", "new_type2"]
-	    }
+	    mapTypeControl: false,
+	    mapTypeId: "new_type"
 	  },
 	      map = new google.maps.Map(document.getElementById("map_canvas"), opts),
 	      markers = [],
 	      infoWindow = new google.maps.InfoWindow();
-	  map.mapTypes.set("new_type1", newType1);
-	  map.mapTypes.set("new_type2", newType2);
+	  map.mapTypes.set("new_type", newType);
 
 	  // if (navigator.geolocation) {
 	  //   navigator.geolocation.getCurrentPosition((position) => {
@@ -214,7 +276,10 @@
 
 	  var placeMarker = function (id, info) {
 	    var position = new google.maps.LatLng(info.lat, info.lng),
-	        marker = new google.maps.Marker({ position: position, map: map });
+	        marker = new google.maps.Marker({
+	      position: position,
+	      map: map
+	    });
 	    google.maps.event.addListener(marker, "click", function () {
 	      getDetailInfo(id);
 	    });
